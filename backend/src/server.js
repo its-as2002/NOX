@@ -1,0 +1,29 @@
+const express = require("express");
+require("dotenv").config();
+const { dbConnect } = require("./config/database");
+
+const path = require("path");
+const app = express();
+const PORT = process.env.PORT || 3000;
+const authRouter = require("./routes/auth.route");
+app.use(express.json());
+app.use("/api/auth", authRouter);
+
+__dirname = path.resolve();
+if (process.env.NODE_ENV === "production") {
+	app.use(express.static(path.join(__dirname, "../client/dist")));
+	app.get("*", (req, res) => {
+		res.sendFile(path.join(__dirname, "../client/dist", "index.html"));
+	});
+}
+
+dbConnect()
+	.then((msg) => {
+		console.log(msg);
+		app.listen(PORT, () => {
+			console.log(`Server is Listening🎧 at PORT : ${PORT} ✅`);
+		});
+	})
+	.catch((err) => {
+		console.log("Connection Failed with MongoDB ❌" + err);
+	});
