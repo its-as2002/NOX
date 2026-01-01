@@ -2,6 +2,9 @@
 	"name": "nox",
 	"version": "1.0.0",
 	"description": "NOX - A real-time chat Application",
+	"engines": {
+		"node": ">=20.0.0"
+	},
 	"homepage": "https://github.com/its-as2002/NOX#readme",
 	"bugs": {
 		"url": "https://github.com/its-as2002/NOX/issues"
