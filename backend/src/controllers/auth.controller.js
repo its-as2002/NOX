@@ -2,6 +2,7 @@ const { User } = require("../models/user.model");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { sendEmail } = require("../emails/emailHandler");
 
 const USER_SAFE_DATA = ["name", "emailId"];
 
@@ -30,16 +31,41 @@ exports.signUp = async (req, res) => {
 		const salt = await bcrypt.genSalt(10);
 		const hashedPassword = await bcrypt.hash(password, salt);
 
-		const user = await User.create({
+		const user = await new User({
 			name,
 			emailId,
 			password: hashedPassword,
 		});
+		await user.save();
+		if (user) {
+			const token = user.getJWT();
+			res.cookie("loginToken", token, {
+				httpOnly: true,
+				sameSite: "strict",
+				maxAge: 60 * 60 * 1000,
+				secure: process.env.NODE_ENV === "production",
+			});
+			const safeUser = {};
+			USER_SAFE_DATA.forEach((field) => {
+				safeUser[field] = user[field];
+			});
 
-		res.status(201).json({
-			message: "Signup successful",
-			userId: user._id,
-		});
+			res.status(201).json({
+				message: "Signup successful",
+				user: safeUser,
+			});
+			try {
+				await sendEmail(
+					safeUser.name,
+					safeUser.emailId,
+					process.env.NODE_ENV === "production"
+						? process.env.CLIENT_URL
+						: "http://localhost:5173/"
+				);
+			} catch (error) {
+				console.log("Error sending Welcome Email : " + error);
+			}
+		} else res.status(400).json({ message: "Invalid User data" });
 	} catch (error) {
 		res.status(500).json({ message: error.message });
 	}
@@ -54,7 +80,7 @@ exports.signIn = async (req, res) => {
 			return res.status(400).json({ message: "Invalid credentials" });
 		}
 
-		const user = await User.findOne({ emailId }).select("+password");
+		const user = await User.findOne({ emailId });
 		if (!user) {
 			return res.status(400).json({ message: "Invalid credentials" });
 		}
@@ -64,9 +90,7 @@ exports.signIn = async (req, res) => {
 			return res.status(400).json({ message: "Invalid credentials" });
 		}
 
-		const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-			expiresIn: "1h",
-		});
+		const token = user.getJWT();
 
 		res.cookie("loginToken", token, {
 			httpOnly: true,
