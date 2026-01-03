@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
+const { ENV } = require("../Utils/env");
 const userSchema = new mongoose.Schema({
 	name: {
 		type: String,
@@ -28,7 +29,7 @@ const userSchema = new mongoose.Schema({
 });
 userSchema.methods.getJWT = async function () {
 	const user = this;
-	const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+	const token = jwt.sign({ userId: user._id }, ENV.JWT_SECRET, {
 		expiresIn: "1h",
 	});
 	return token;

@@ -1,6 +1,7 @@
 const { Resend } = require("resend");
-exports.resendClient = new Resend(process.env.RESEND_API);
+const { ENV } = require("./env");
+exports.resendClient = new Resend(ENV.RESEND_API);
 exports.sender = {
-	name: process.env.SENDER_NAME,
-	email: process.env.SENDER_EMAIL,
+	name: ENV.SENDER_NAME,
+	email: ENV.SENDER_EMAIL,
 };

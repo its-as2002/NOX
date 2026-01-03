@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
+const { ENV } = require("../Utils/env");
 
 const dbConnect = async () => {
-	await mongoose.connect(process.env.MONGODB_URI);
+	await mongoose.connect(ENV.MONGODB_URI);
 	return "Connection with MongoDB Established ✅";
 };
 

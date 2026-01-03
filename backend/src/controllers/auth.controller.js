@@ -2,7 +2,8 @@ const { User } = require("../models/user.model");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { sendEmail } = require("../emails/emailHandler");
+const { sendWelcomeEmail } = require("../emails/emailHandler");
+const { ENV } = require("../Utils/env");
 
 const USER_SAFE_DATA = ["name", "emailId"];
 
@@ -43,7 +44,7 @@ exports.signUp = async (req, res) => {
 				httpOnly: true,
 				sameSite: "strict",
 				maxAge: 60 * 60 * 1000,
-				secure: process.env.NODE_ENV === "production",
+				secure: ENV.NODE_ENV === "production",
 			});
 			const safeUser = {};
 			USER_SAFE_DATA.forEach((field) => {
@@ -55,11 +56,11 @@ exports.signUp = async (req, res) => {
 				user: safeUser,
 			});
 			try {
-				await sendEmail(
+				await sendWelcomeEmail(
 					safeUser.name,
 					safeUser.emailId,
-					process.env.NODE_ENV === "production"
-						? process.env.CLIENT_URL
+					ENV.NODE_ENV === "production"
+						? ENV.CLIENT_URL
 						: "http://localhost:5173/"
 				);
 			} catch (error) {
@@ -96,7 +97,7 @@ exports.signIn = async (req, res) => {
 			httpOnly: true,
 			sameSite: "strict",
 			maxAge: 60 * 60 * 1000,
-			secure: process.env.NODE_ENV === "production",
+			secure: ENV.NODE_ENV === "production",
 		});
 
 		const safeUser = {};
@@ -118,7 +119,7 @@ exports.logout = (req, res) => {
 	res.cookie("loginToken", "", {
 		httpOnly: true,
 		sameSite: "strict",
-		secure: process.env.NODE_ENV === "production",
+		secure: ENV.NODE_ENV === "production",
 		expires: new Date(0),
 	});
 

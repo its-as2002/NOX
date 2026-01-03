@@ -1,7 +1,7 @@
 const { resendClient, sender } = require("../Utils/resend");
 const { emailTemplate } = require("./emailTemplate");
 
-exports.sendEmail = async (recieverName, recieversEmail, clientURL) => {
+exports.sendWelcomeEmail = async (recieverName, recieversEmail, clientURL) => {
 	const { data, error } = await resendClient.emails.send({
 		from: `${sender.name} <${sender.email}>`,
 		to: recieversEmail,
