@@ -1,11 +1,12 @@
-const express = require("express");
-const {
+import express from "express";
+import { auth } from "../middlewares/auth.middleware.js";
+
+import {
 	signIn,
 	signUp,
 	logout,
 	updateProfilePic,
-} = require("../controllers/auth.controller");
-const { auth } = require("../middlewares/auth.middleware");
+} from "../controllers/auth.controller.js";
 const router = express.Router();
 
 router.post("/signIn", signIn);
@@ -20,4 +21,4 @@ router.get("/check", auth, (req, res) => {
 	res.status(200).json({ user: req.user });
 });
 
-module.exports = router;
+export default router;

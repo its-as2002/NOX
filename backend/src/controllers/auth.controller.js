@@ -1,14 +1,14 @@
-const { User } = require("../models/user.model");
-const validator = require("validator");
-const bcrypt = require("bcryptjs");
-const { sendWelcomeEmail } = require("../emails/emailHandler");
-const { ENV } = require("../Utils/env");
-const { cloudinary } = require("../Utils/cloudinary");
+import { User } from "../models/user.model.js";
+import validator from "validator";
+import bcrypt from "bcryptjs";
+import { sendWelcomeEmail } from "../emails/emailHandler.js";
+import { ENV } from "../Utils/env.js";
+import cloudinary from "../Utils/cloudinary.js";
 
 const USER_SAFE_DATA = ["name", "emailId", "profilePic"];
 
 /* ========================= SIGN UP ========================= */
-exports.signUp = async (req, res) => {
+export const signUp = async (req, res) => {
 	try {
 		const { name, emailId, password } = req.body;
 
@@ -73,7 +73,7 @@ exports.signUp = async (req, res) => {
 };
 
 /* ========================= SIGN IN ========================= */
-exports.signIn = async (req, res) => {
+export const signIn = async (req, res) => {
 	try {
 		const { emailId, password } = req.body;
 
@@ -114,7 +114,7 @@ exports.signIn = async (req, res) => {
 };
 
 /* ========================= LOGOUT ========================= */
-exports.logout = (req, res) => {
+export const logout = (req, res) => {
 	res.cookie("loginToken", "", {
 		httpOnly: true,
 		sameSite: "strict",
@@ -127,7 +127,7 @@ exports.logout = (req, res) => {
 	});
 };
 
-exports.updateProfilePic = async (req, res) => {
+export const updateProfilePic = async (req, res) => {
 	try {
 		const user = req.user;
 		const { profilePic, _id } = user;

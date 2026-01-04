@@ -25,5 +25,8 @@
 	},
 	"devDependencies": {
 		"concurrently": "^9.2.1"
+	},
+	"dependencies": {
+		"@arcjet/node": "^1.0.0-beta.15"
 	}
 }

@@ -1,9 +1,7 @@
-const mongoose = require("mongoose");
-const { ENV } = require("../Utils/env");
+import mongoose from "mongoose";
+import { ENV } from "../Utils/env.js";
 
-const dbConnect = async () => {
+export const dbConnect = async () => {
 	await mongoose.connect(ENV.MONGODB_URI);
 	return "Connection with MongoDB Established ✅";
 };
-
-module.exports = { dbConnect };

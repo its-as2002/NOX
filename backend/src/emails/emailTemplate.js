@@ -1,4 +1,4 @@
-exports.emailTemplate = (recieverName, clientURL) => {
+export const emailTemplate = (recieverName, clientURL) => {
 	return `<!DOCTYPE html>
   <html lang="en">
   <head>

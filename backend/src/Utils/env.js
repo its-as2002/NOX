@@ -1,4 +1,4 @@
-exports.ENV = {
+export const ENV = {
 	MONGODB_URI: process.env.MONGODB_URI,
 	PORT: process.env.PORT,
 	JWT_SECRET: process.env.JWT_SECRET,
@@ -10,4 +10,6 @@ exports.ENV = {
 	CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
 	CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
 	CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET,
+	ARCJET_KEY: process.env.ARCJET_KEY,
+	ARCJET_ENV: process.env.ARCJET_ENV,
 };

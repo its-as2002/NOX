@@ -4,7 +4,7 @@
 	"description": "backend for chatapp",
 	"license": "ISC",
 	"author": "AYUSH SRIVASTAVA",
-	"type": "commonjs",
+	"type": "module",
 	"main": "src/server.js",
 	"scripts": {
 		"test": "jest",
@@ -12,6 +12,8 @@
 		"dev": "nodemon src/server.js"
 	},
 	"dependencies": {
+		"@arcjet/inspect": "^1.0.0-beta.10",
+		"@arcjet/node": "^1.0.0-beta.10",
 		"bcryptjs": "^2.4.3",
 		"cloudinary": "^2.5.1",
 		"cookie-parser": "^1.4.7",

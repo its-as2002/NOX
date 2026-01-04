@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
-const jwt = require("jsonwebtoken");
-const { ENV } = require("../Utils/env");
+import mongoose from "mongoose";
+import jwt from "jsonwebtoken";
+import { ENV } from "../Utils/env.js";
 const userSchema = new mongoose.Schema(
 	{
 		name: {
@@ -41,5 +41,4 @@ userSchema.methods.getJWT = async function () {
 	});
 	return token;
 };
-const User = mongoose.model("User", userSchema);
-module.exports = { User };
+export const User = mongoose.model("User", userSchema);
