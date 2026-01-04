@@ -2,7 +2,7 @@ import express from "express";
 import { auth } from "../middlewares/auth.middleware.js";
 
 import {
-	signIn,
+	login,
 	signUp,
 	logout,
 	updateProfilePic,
