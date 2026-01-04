@@ -9,7 +9,7 @@ const auth = async (req, res, next) => {
 				.status(401)
 				.json({ message: "Unauthorized access : Token missing" });
 		const { userId } = jwt.verify(loginToken, ENV.JWT_SECRET);
-		const user = await User.findById(userId);
+		const user = await User.findById(userId).select("-password");
 		if (!user)
 			return res.status(401).json({ message: "Unauthorized :User not found" });
 		req.user = user;

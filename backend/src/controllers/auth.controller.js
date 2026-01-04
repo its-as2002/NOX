@@ -1,11 +1,11 @@
 const { User } = require("../models/user.model");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 const { sendWelcomeEmail } = require("../emails/emailHandler");
 const { ENV } = require("../Utils/env");
+const { cloudinary } = require("../Utils/cloudinary");
 
-const USER_SAFE_DATA = ["name", "emailId"];
+const USER_SAFE_DATA = ["name", "emailId", "profilePic"];
 
 /* ========================= SIGN UP ========================= */
 exports.signUp = async (req, res) => {
@@ -39,7 +39,7 @@ exports.signUp = async (req, res) => {
 		});
 		await user.save();
 		if (user) {
-			const token = user.getJWT();
+			const token = await user.getJWT();
 			res.cookie("loginToken", token, {
 				httpOnly: true,
 				sameSite: "strict",
@@ -91,8 +91,7 @@ exports.signIn = async (req, res) => {
 			return res.status(400).json({ message: "Invalid credentials" });
 		}
 
-		const token = user.getJWT();
-
+		const token = await user.getJWT();
 		res.cookie("loginToken", token, {
 			httpOnly: true,
 			sameSite: "strict",
@@ -126,4 +125,28 @@ exports.logout = (req, res) => {
 	res.status(200).json({
 		message: "User logged out successfully",
 	});
+};
+
+exports.updateProfilePic = async (req, res) => {
+	try {
+		const user = req.user;
+		const { profilePic, _id } = user;
+		if (!profilePic) {
+			return res.status(400).json({ message: "Profile Pic is required" });
+		}
+		const uploadResponse = await cloudinary.uploader.upload(profilePic);
+		const updatedUser = await User.findOneAndUpdate(
+			{ _id: _id },
+			{ profilePic: uploadResponse.secure_url },
+			{ new: true }
+		);
+		const safeUser = {};
+		USER_SAFE_DATA.forEach((field) => {
+			safeUser[field] = updatedUser[field];
+		});
+		safeUser.profilePic = updatedUser.profilePic;
+		res.status(200).json({ user: safeUser });
+	} catch (error) {
+		res.status(500).json({ message: "Internal Server Error" });
+	}
 };
