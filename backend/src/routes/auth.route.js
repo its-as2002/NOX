@@ -9,7 +9,7 @@ import {
 } from "../controllers/auth.controller.js";
 const router = express.Router();
 
-router.post("/signIn", signIn);
+router.post("/login", login);
 
 router.post("/signUp", signUp);
 

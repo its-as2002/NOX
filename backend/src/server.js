@@ -15,9 +15,9 @@ app.use("/api/auth", authRouter);
 
 const __dirname = path.resolve();
 if (ENV.NODE_ENV === "production") {
-	app.use(express.static(path.join(__dirname, "../client/dist")));
+	app.use(express.static(path.join(__dirname, "../../client/dist/")));
 	app.get("*", (req, res) => {
-		res.sendFile(path.join(__dirname, "../client/dist", "index.html"));
+		res.sendFile(path.join(__dirname, "../../client/dist", "index.html"));
 	});
 }
 
@@ -29,5 +29,5 @@ dbConnect()
 		});
 	})
 	.catch((err) => {
-		console.log("Connection Failed with MongoDB ❌" + err);
+		console.log("Connection Failed with MongoDB ❌", err);
 	});
