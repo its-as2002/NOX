@@ -5,7 +5,7 @@ import { sendWelcomeEmail } from "../emails/emailHandler.js";
 import { ENV } from "../Utils/env.js";
 import cloudinary from "../Utils/cloudinary.js";
 
-const USER_SAFE_DATA = ["name", "emailId", "profilePic"];
+const USER_SAFE_DATA = ["_id", "name", "emailId", "profilePic"];
 
 /* ========================= SIGN UP ========================= */
 export const signUp = async (req, res) => {

@@ -7,12 +7,16 @@ const messageSchema = new mongoose.Schema(
 			ref: "User",
 			required: true,
 		},
-		recieverId: {
+		receiverId: {
 			type: mongoose.Schema.Types.ObjectId,
 			ref: "User",
 			required: true,
 		},
-		text: { type: String },
+		text: {
+			type: String,
+			maxlength: 2000,
+			trim: true,
+		},
 		image: {
 			type: String,
 		},
@@ -21,5 +25,10 @@ const messageSchema = new mongoose.Schema(
 		timestamps: true,
 	}
 );
-
+messageSchema.pre("save", function (next) {
+	const user = this;
+	if (user.senderId.equals(user.receiverId))
+		throw new Error("You cannot send message to yourself");
+	next();
+});
 export const Message = mongoose.model("Message", messageSchema);
