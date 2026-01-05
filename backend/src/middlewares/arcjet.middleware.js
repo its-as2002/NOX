@@ -25,15 +25,11 @@ export const arcjetProtect = async (req, res, next) => {
 			if (decision.reason.isBot()) {
 				return res.status(403).json({ error: "No bots allowed" });
 			}
-			return res.status(403).json({ error: "Forbidden" });
-		}
-
-		if (decision.ip.isHosting()) {
-			return res.status(403).json({ error: "Forbidden" });
+			return res.status(403).json({ error: "Forbidden " });
 		}
 
 		if (decision.results.some(isSpoofedBot)) {
-			return res.status(403).json({ error: "Forbidden" });
+			return res.status(403).json({ error: "Forbidden : SpoofedBot Detected" });
 		}
 
 		next();
